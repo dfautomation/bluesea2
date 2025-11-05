@@ -373,7 +373,6 @@ bool ProfileInit(ros::NodeHandle priv_nh, ArgData &argdata)
 {
 	priv_nh.param("number", argdata.num, 1);
 	priv_nh.param("type", argdata.type, std::string("uart"));
-	priv_nh.param("frame_id", argdata.frame_id, std::string("LH_laser"));
 	priv_nh.param("dev_id", argdata.dev_id, ANYONE); //
 	// dual lidar arg
 	for (int i = 0; i < argdata.num; i++)
@@ -382,9 +381,10 @@ bool ProfileInit(ros::NodeHandle priv_nh, ArgData &argdata)
 		char s[32], t[32];
 		if (i == 0)
 		{
+			priv_nh.param("frame_id", argdata.frame_id, std::string("laser"));
 			if (argdata.type == "udp")
 			{
-				priv_nh.param("lidar_ip", arg.arg1, std::string("192.168.158.98"));
+				priv_nh.param("lidar_ip", arg.arg1, std::string("192.168.100.101"));
 				priv_nh.param("lidar_port", arg.arg2, 6543);
 			}
 			else if (argdata.type == "vpc")
@@ -408,6 +408,8 @@ bool ProfileInit(ros::NodeHandle priv_nh, ArgData &argdata)
 		}
 		else
 		{
+			sprintf(s, "frame_id%d", i);
+			priv_nh.param(s, argdata.frame_id, std::string("laser2"));
 			if (argdata.type == "udp")
 			{
 				sprintf(s, "lidar%d_ip", i);
