@@ -43,8 +43,8 @@
     <param name="direction" value="-1"/>
 
     <!-- Remap topic -->
-    <remap from="scan" to="scan"/>
-    <remap from="scan1" to="scan2"/>
+    <remap from="scan" to="/scan"/>
+    <remap from="scan1" to="/scan2"/>
   </node>
  </group>
 </launch>

@@ -381,7 +381,6 @@ bool ProfileInit(ros::NodeHandle priv_nh, ArgData &argdata)
 		char s[32], t[32];
 		if (i == 0)
 		{
-			priv_nh.param("frame_id", argdata.frame_id, std::string("laser"));
 			if (argdata.type == "udp")
 			{
 				priv_nh.param("lidar_ip", arg.arg1, std::string("192.168.100.101"));
@@ -408,8 +407,6 @@ bool ProfileInit(ros::NodeHandle priv_nh, ArgData &argdata)
 		}
 		else
 		{
-			sprintf(s, "frame_id%d", i);
-			priv_nh.param(s, argdata.frame_id, std::string("laser2"));
 			if (argdata.type == "udp")
 			{
 				sprintf(s, "lidar%d_ip", i);
@@ -531,6 +528,15 @@ int main(int argc, char **argv)
 	// init launch arg
 	ArgData argdata;
 	ProfileInit(priv_nh, argdata);
+	std::vector<std::string> frame_ids(argdata.num);
+	for (int i = 0; i < argdata.num; i++) {
+		std::string param_name = "frame_id";
+		if (i >= 1) {
+			param_name = "frame_id" + std::to_string(i+1);
+		}
+		priv_nh.param(param_name, frame_ids[i], std::string("laser"));
+	}
+  
 	if(argdata.log_enable)
 	{
 		ROS_INFO("Specific information will be saved to the log file:%s\n", argdata.log_path.c_str());
@@ -591,6 +597,7 @@ int main(int argc, char **argv)
 				ret = m_driver->checkIsRun(i);
 				continue;
 			}
+			argdata.frame_id = frame_ids[i];
 			if (!argdata.output_360)
 			{
 				RawData *fans[MAX_FANS] = {NULL};
