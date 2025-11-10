@@ -13,8 +13,9 @@ BlueSeaLidarDriver *m_driver = NULL;
 void PublishLaserScanFan(ros::Publisher &laser_pub, RawData *fan, std::string &frame_id, double min_dist, double max_dist, uint8_t inverted, uint8_t reversed)
 {
 	sensor_msgs::LaserScan msg;
-	msg.header.stamp.sec = fan->ts[0];
-	msg.header.stamp.nsec = fan->ts[1];
+	// msg.header.stamp.sec = fan->ts[0];
+	// msg.header.stamp.nsec = fan->ts[1];
+	msg.header.stamp = ros::Time::now();
 
 	msg.header.frame_id = frame_id;
 
